@@ -1,12 +1,27 @@
-import express from 'express';
+import express, {Request, Response} from 'express';
+import fs from 'fs'
+import morgan from 'morgan'
+import path from 'path';
+import { UserRouter } from './routes/userRoute';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
+//Parser middleware
+app.use(express.json())
+
+//logs
+const writeStream = fs.createWriteStream(path.join('./', "access.log"), {flags:"a"})
+app.use(morgan(":date - :method - :url - :status - :response-time ms", {stream: writeStream}))
+
+app.get('/', (req:Request, res:Response) => {
   res.send('Hello, TypeScript!');
 });
 
+// Routes
+app.use('/auth', UserRouter)
+
+
 app.listen(port,() => {
-  console.log(`Listening on http://localhost:${port}`);
+  console.log(`App Listening on http://localhost:${port}`);
 });
