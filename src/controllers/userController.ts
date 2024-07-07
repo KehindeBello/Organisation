@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { generateToken, verifyToken } from "../utils/jwt";
-import { hashPassword } from "../utils/auth";
+import { comparePassword, hashPassword } from "../utils/auth";
 import { logger } from "../utils/logger";
 
 const prisma = new PrismaClient()
@@ -59,5 +59,60 @@ export class UserController {
                 "statusCode": 400
             })
         }
+    }
+
+    async login_user(req:Request, res:Response) {
+        
+        const {email, password} = req.body;
+        try {
+            const user = await prisma.user.findUnique({ where: {email}});
+            
+            if (!user) {
+                logger.warn('Failed Login Attempt!')
+                return res.status(401).json({
+                    "status": "Bad request",
+                    "message": "Authentication Failed",
+                    "statusCode": 401
+                });
+            }
+
+            const correctPassword = await comparePassword(password, user.password);
+
+            if (!correctPassword) {
+                logger.warn(`Incorrect password for - ${email}`)
+                return res.status(401).json({
+                    "status": "Bad request",
+                    "message": "Authentication Failed",
+                    "statusCode": 401
+                });
+            }
+
+            //create access token
+            const accessToken = generateToken({userId: user.userId, email: user.email});
+            logger.info(`${email} logged in successfully!`);
+
+            return res.status(200).json({
+                "stats": "success",
+                "message": "Login successful",
+                "data": {
+                    "accessToken": accessToken,
+                    "user": {
+                        "userId": user.userId,
+                        "firstName": user.firstName,
+                        "lastName": user.lastName,
+                        "email": user.email,
+                        "phone": user.phone
+                    }
+                }
+            });
+        } catch (error:any) {
+            logger.error(`Error during login: ${error.message}`);
+            return res.status(401).json({
+                "status": "Bad request",
+                "message": "Authentication Failed",
+                "statusCode": 401
+            });
+        }
+
     }
 }
