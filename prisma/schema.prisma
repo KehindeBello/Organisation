@@ -8,18 +8,18 @@ datasource db {
 }
 
 model Organisation {
-  orgId       String @unique
+  orgId       String @id @default(uuid())
   name        String
-  description String
+  description String?
   userId      String @unique
   User        User   @relation(fields: [userId], references: [userId])
 }
 
 model User {
-  userId       String        @id @unique
+  userId       String @id @default(uuid())
   firstName    String
   lastName     String
-  email        String        @unique
+  email        String @unique
   password     String
   phone        String
   Organisation Organisation?
