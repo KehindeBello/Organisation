@@ -3,6 +3,7 @@ import fs from 'fs'
 import morgan from 'morgan'
 import path from 'path';
 import { UserRouter } from './routes/userRoute';
+import { AuthRouter } from './routes/authRoute';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,7 +20,8 @@ app.get('/', (req:Request, res:Response) => {
 });
 
 // Routes
-app.use('/auth', UserRouter)
+app.use('/auth', AuthRouter)
+app.use('/api', UserRouter)
 
 
 app.listen(port,() => {
