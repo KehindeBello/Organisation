@@ -15,28 +15,29 @@ export class AuthController {
         const hashedPassword = await hashPassword(password)
         logger.info(`hashed password - ${hashedPassword}`)
         try {
-            // Create User
+            // Create User and Default Organisation
             const user = await prisma.user.create({
                 data: {
                     email: email,
                     firstName: firstName,
                     lastName: lastName,
                     phone: phone,
-                    password: hashedPassword ,
+                    password: hashedPassword,
+                    organisations: {
+                        create: {
+                            Organisation: {
+                                create: {
+                                    name: `${firstName}'s Organisation`
+                                }
+                            }
+                        }
+                    }
                 }
             });
             //Create jwt token
             const accessToken = generateToken({userId: user.userId, email: user.email});
-            logger.info(`User created: ${email}`);
+            logger.info(`User - ${email} and Organisation created`);
     
-            //Create default organization
-            const organisation = await prisma.organisation.create({
-                data: {
-                    name: `${firstName}'s Organisation`,
-                    userId: user.userId
-                }
-            })
-            logger.info(`Organization created - ${organisation.name}`)
             res.status(201).json({
                 "status": "success",
                 "message": "Registration successful",
