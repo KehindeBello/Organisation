@@ -16,7 +16,6 @@ export class OrganisationController {
                 data: {
                     name: name,
                     description: description,
-                    userId: userId
                 }
             });
             logger.info(`${name} Organisation Created`);
@@ -52,7 +51,11 @@ export class OrganisationController {
                 const organisation = await prisma.organisation.findFirst({
                     where: {
                         orgId: orgId,
-                        userId: userId
+                        users: {
+                            some: {
+                                userId: userId
+                            }
+                        }
                     },
                     select: {
                         orgId: true,
@@ -78,7 +81,13 @@ export class OrganisationController {
             } else {
                 //Fetch all organisations the user belongs to
                 const organisations = await prisma.organisation.findMany({
-                    where: {userId},
+                    where: {
+                        users: {
+                            some: {
+                                userId: userId
+                            }
+                        }
+                    },
                     select: {
                         orgId: true,
                         name: true,
