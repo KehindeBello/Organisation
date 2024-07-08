@@ -40,5 +40,68 @@ export class OrganisationController {
         }
         
     }
+    async get_Organisation(req: Request, res:Response) {
+        
+        const userId = req.user?.userId;
+        const { orgId } = req.params;
 
+        logger.info(`Organisation ID - ${orgId}`);
+        try {
+            if (orgId) {
+                //Fetch a single organisation
+                const organisation = await prisma.organisation.findFirst({
+                    where: {
+                        orgId: orgId,
+                        userId: userId
+                    },
+                    select: {
+                        orgId: true,
+                        name: true,
+                        description: true
+                    }
+
+                });
+
+                if (!organisation) {
+                    return res.status(400).json({
+                        "status": "Bad Request",
+                        "message": "Client error",
+                        "statusCode": 400
+                    });
+                }
+
+                return res.status(200).json({
+                    "status": "success",
+                    "message": "Organisation fetched successfully",
+                    "data": organisation
+                });
+            } else {
+                //Fetch all organisations the user belongs to
+                const organisations = await prisma.organisation.findMany({
+                    where: {userId},
+                    select: {
+                        orgId: true,
+                        name: true,
+                        description: true
+                    }
+                })
+                logger.info(`Organizations fetched`);
+    
+                return res.status(200).json({
+                    "status":"success",
+                    "message":" Fetched Organisation",
+                    "data": {
+                        organisations
+                    }
+                })
+            }
+        } catch(error: any) {
+
+            return res.status(400).json({
+                "status":"Bad Request",
+                "message": "Client error",
+                "statusCode": 400
+            })
+        }
+    }
 }
