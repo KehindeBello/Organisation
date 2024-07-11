@@ -15,6 +15,14 @@ export class AuthController {
         const hashedPassword = await hashPassword(password)
         logger.info(`hashed password - ${hashedPassword}`)
         try {
+            const userExists = await prisma.user.findUnique({where: {email}})
+            if (userExists) {
+                return res.status(422).json({
+                    "status": "Bad Request",
+                    "message": "Email already exists",
+                    "statusCode": 422
+                })
+            }
             // Create User and Default Organisation
             const user = await prisma.user.create({
                 data: {
