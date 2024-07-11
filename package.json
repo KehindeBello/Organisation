@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --detectOpenHandles",
-    "start": "node src/index.js",
-    "dev": "nodemon",
-    "migrate:test": "DATABASE_URL=$(grep TEST_DATABASEURL .env | cut -d '=' -f2) npx prisma migrate deploy"
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
