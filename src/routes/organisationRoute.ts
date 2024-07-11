@@ -2,7 +2,7 @@ import { Router } from "express";
 import { OrganisationController } from "../controllers/organisationController";
 import { protectRoute } from "../middlewares/authMiddleware";
 import { validateSchema } from "../middlewares/validate";
-import { organisationSchema } from "../../schemas/organisationSchema";
+import { organisationSchema } from "../schemas/organisationSchema";
 
 const router = Router()
 const organisationController = new OrganisationController()
