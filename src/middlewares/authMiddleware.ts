@@ -9,7 +9,7 @@ export const protectRoute = (req: Request, res: Response, next: NextFunction) =>
     const authHeader = req.headers["authorization"];
 
     if (!authHeader || !authHeader.startsWith("Bearer")) {
-        logger.error(`Bearer token nissing!`);
+        logger.error(`Bearer token missing!`);
         return res.status(401).json({
             "message": "Unauthorized, Bearer token missing!"
         })
