@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../utils/jwt";
 import { logger } from "../utils/logger";
-import { UserJwtPayload } from "../../interfaces/customRequest";
+import { UserJwtPayload } from "../interfaces/customRequest";
 
 
 export const protectRoute = (req: Request, res: Response, next: NextFunction) => {

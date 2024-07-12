@@ -1,5 +1,5 @@
 import jwt, { SignOptions} from "jsonwebtoken";
-import { UserJwtPayload } from "../../interfaces/customRequest";
+import { UserJwtPayload } from "../interfaces/customRequest";
 
 const secretKey = process.env.JWT_SECRET || 'secret'
 
