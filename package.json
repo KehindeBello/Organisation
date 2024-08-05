@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles",
-    "build": "tsc",
+    "test": "jest --forceExit",
+    "build": "prisma generate && tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
