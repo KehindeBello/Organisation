@@ -1,4 +1,4 @@
-import { UserJwtPayload } from "../interfaces/userJwtPayload"
+import { UserJwtPayload } from "../src/interfaces/userJwtPayload"
 import { generateToken, verifyToken } from "../src/utils/jwt";
 
 
