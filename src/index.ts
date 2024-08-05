@@ -3,7 +3,7 @@ import { UserRouter } from './routes/userRoute';
 import { AuthRouter } from './routes/authRoute';
 import { OrganisationRouter } from './routes/organisationRoute';
 
-export const app = express();
+const app = express();
 const port = process.env.PORT || 3000;
 
 //Parser middleware
@@ -23,3 +23,5 @@ app.use('/api', OrganisationRouter)
 app.listen(port,() => {
   console.log(`App Listening on http://localhost:${port}`);
 });
+
+export default app
