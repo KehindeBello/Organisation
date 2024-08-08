@@ -1,10 +1,7 @@
 import { UserJwtPayload } from './userJwtPayload';
 
-
-declare module 'express-serve-static-core' {
+declare module 'express' {
   interface Request {
     user?: UserJwtPayload;
   }
 }
-
-export { UserJwtPayload };
